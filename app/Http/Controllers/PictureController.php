@@ -14,13 +14,13 @@ class PictureController extends Controller
     public function home(){
 
         //Pintar la vista con las fotos del usuario (si tiene)
-        return view('pictures.list',["pictures" => Auth::user()->pictures]);
+        return view('pictures.list',["pictures" => Auth::user()->pictures->sortByDesc("created_at")]);
     }
 
     public function saveAjax(Request $req){
         $response = ["status"=>0,"msg"=>""];
 
-        
+
         $validatorRules = [
             "title" => ['required','max:80'],
             "rating" => ['numeric','max:5']
@@ -74,10 +74,10 @@ class PictureController extends Controller
                     $picture->save();
                 }
                 $response["status"] = 20;
-                $response["msg"] = $picture->id;  
+                $response["msg"] = $picture->id;
             }catch(\Exception $e){
                 $response["status"] = 50;
-                $response["msg"] = [$e->getMessage()]; 
+                $response["msg"] = [$e->getMessage()];
             }
         }
 

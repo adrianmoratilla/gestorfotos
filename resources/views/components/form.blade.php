@@ -2,11 +2,11 @@
 
   $rutaSubmit = "";
   $titulo = "";
-  
+
   if($tipo=='registro'){
     $titulo = 'Registrarse';
     $rutaSubmit = route('do-register');
-  }else{
+  }elseif($tipo=='login'){
     $titulo = 'Iniciar sesión';
     $rutaSubmit = route('do-login');
   }
@@ -69,9 +69,12 @@
     @endif
   </div>
   @if($tipo=='login')
-    <div class="mb-3 form-check">
-      <input type="checkbox" class="form-check-input" id="checkRemember">
-      <label class="form-check-label" for="checkRemember" name="remember">Mantener la sesión iniciada</label>
+    <div class="mb-3 form-check" style="display:flex; justify-content: space-between;">
+        <div>
+            <input type="checkbox" class="form-check-input" id="checkRemember">
+            <label class="form-check-label" for="checkRemember" name="remember">Mantener la sesión iniciada</label>
+        </div>
+        <a href="{{ url ('forgot-password')}}">¿Has olvidado tu contraseña?</a>
     </div>
   @endif
   <button type="submit" class="btn btn-primary">Enviar</button>

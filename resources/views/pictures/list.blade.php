@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('content')
-	
-	<div class="row mb-5">
+
+	<div class="row mb-5" style="display:flex">
 		<button id="newPicture" class="btn btn-success offset-10 col-2" onclick="openModal('create')">Añadir</button>
 	</div>
 
-	<section id="pictures" class="row g-3">
+	<section id="pictures" class="row g-3 gap" style="margin-bottom: 2%">
 		@if(!count($pictures))
 			<h2>¡Añade tus primeras fotos!</h2>
 		@else
@@ -32,7 +32,7 @@
 					</div>
 				</div>
 			@endforeach
-		@endif		
+		@endif
 	</section>
 
 	<div id="modalForm" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
@@ -111,14 +111,15 @@
 		const deleteUrl = "{{route('remove-picture')}}";
 		const csrf = "{{csrf_token()}}";
 		var pictures = {
-			@foreach($pictures as $picture)
+            @foreach($pictures as $picture)
 			"{{$picture->id}}":{
-				"title":"{{$picture->picture_name}}",
+                "title":"{{$picture->picture_name}}",
 				"image":"{{route('get-picture',['picture'=>$picture->picture_url])}}",
 				"rating":"{{$picture->rating}}"
 			},
 			@endforeach
 		};
+        console.log(pictures);
 	</script>
 
 	<script type="text/javascript" src="{{asset('js/pictures.js')}}"></script>

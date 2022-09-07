@@ -67,14 +67,14 @@ function save(){
 }
 
 async function sendData() {
-  let formData = new FormData(); 
+  let formData = new FormData();
   formData.append("image", picture.files[0]);
   formData.append("title", title.value);
   formData.append("rating", rating.value);
   if(selectedId>0)
   	formData.append("id",selectedId);
   var response = await fetch(postUrl, {
-    method: "POST", 
+    method: "POST",
     body: formData,
     credentials: 'include',
     headers: {
@@ -87,7 +87,7 @@ async function sendData() {
 function readResponse(data){
 
 	//Comprobar el status
-	
+
 	//Si es bueno
 	if(data.status == 20){
 		//Se almacena la foto
@@ -113,7 +113,7 @@ function readResponse(data){
 			starsContainer.innerHTML="";
 			starsContainer.appendChild(generateCardRating(selectedId,rating.value));
 
-			new StarRating('#cardRating'+selectedId);			
+			new StarRating('#cardRating'+selectedId);
 
 			selectedId = -1;
 		}
@@ -156,7 +156,7 @@ function addCard(id,values){
 	let starsContainer = document.createElement('div');
 	starsContainer.id = "starsContainer"+id;
 	cardBody.appendChild(starsContainer);
-	
+
 
 	starsContainer.appendChild(generateCardRating(id,values.rating));
 
@@ -190,8 +190,8 @@ function addCard(id,values){
 
 	if(Object.keys(pictures).length == 1)
 		picturesContainer.innerHTML = "";
-	picturesContainer.appendChild(card);
-	
+	picturesContainer.prepend(card);
+
 	new StarRating('#cardRating'+id);
 }
 

@@ -21,6 +21,8 @@ Route::get('/logout',[UserController::class,'logout'])->name('logout');
 Route::post('/do-login',[UserController::class,'login'])->name('do-login');
 Route::post('/do-register',[UserController::class,'register'])->name('do-register');
 
+// Route::get('/forgot-password', 'users.forgot-password')->middleware('guest')->name('forgot-password');
+
 Route::middleware('auth')->get('/',[PictureController::class,'home'])->name('home');
 Route::middleware('auth')->post('/save-picture',[PictureController::class,'saveAjax'])->name('save-picture');
 Route::middleware('auth')->get('/picture/{picture}',[PictureController::class,'getPicture'])->name('get-picture');

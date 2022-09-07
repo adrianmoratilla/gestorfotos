@@ -7,6 +7,7 @@ use Illuminate\Validation\Rules\Password;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use \Illuminate\Contracts\Auth\CanResetPassword;
 
 class UserController extends Controller
 {
@@ -56,11 +57,12 @@ class UserController extends Controller
 
     public function logout(Request $req){
         Auth::logout();
- 
+
         $req->session()->invalidate();
-     
+
         $req->session()->regenerateToken();
-     
+
         return redirect(route('login'));
     }
 }
+
