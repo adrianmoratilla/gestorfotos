@@ -74,7 +74,7 @@
             <input type="checkbox" class="form-check-input" id="checkRemember">
             <label class="form-check-label" for="checkRemember" name="remember">Mantener la sesión iniciada</label>
         </div>
-        <a href="{{ url ('forgot-password')}}">¿Has olvidado tu contraseña?</a>
+        <a href="{{ route ('forget.password.get')}}">¿Has olvidado tu contraseña?</a>
     </div>
   @endif
   <button type="submit" class="btn btn-primary">Enviar</button>
