@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('picture_url')->required();
             $table->tinyInteger('rating')->default(0);
             $table->foreignId('user_id')->constrained();
+            $table->timestamp('date_taken')->nullable()->default(time());
             $table->timestamps();
         });
     }

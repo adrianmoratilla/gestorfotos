@@ -15,6 +15,7 @@
 					<img src="{{route('get-picture',['picture'=>$picture->picture_url])}}" class="card-img-top">
 					<div class="card-body">
 						<h5 id="cardTitle{{$picture->id}}">{{$picture->picture_name}}</h5>
+                        <p id="cardDate{{$picture->id}}">{{$picture->date_taken}}</p>
 						<div id="starsContainer{{$picture->id}}">
 							<select class="star-rating" id="cardRating{{$picture->id}}" disabled="">
 								<option></option>
@@ -71,6 +72,12 @@
 					</select>
 			    </div>
 			</div>
+            <div class="row mb-3">
+                <label for="userDate" class="col-sm-2 col-form-label">Fecha de captura</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" id="dateTaken">
+                </div>
+            </div>
 			<div class="alert alert-danger" id="errors" style="display:none"></div>
 	      </div>
 	      <div class="modal-footer">
@@ -115,11 +122,11 @@
 			"{{$picture->id}}":{
                 "title":"{{$picture->picture_name}}",
 				"image":"{{route('get-picture',['picture'=>$picture->picture_url])}}",
-				"rating":"{{$picture->rating}}"
+				"rating":"{{$picture->rating}}",
+                "dateTaken":"{{$picture->date_taken}}"
 			},
 			@endforeach
 		};
-        console.log(pictures);
 	</script>
 
 	<script type="text/javascript" src="{{asset('js/pictures.js')}}"></script>

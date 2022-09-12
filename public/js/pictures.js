@@ -11,6 +11,7 @@ const imageInputContainer = document.getElementById('imageInputContainer');
 const picture = document.getElementById('picture');
 const title = document.getElementById('title');
 const rating = document.getElementById('rating');
+const dateTaken = document.getElementById('dateTaken');
 const errors = document.getElementById('errors');
 
 var selectedId = -1;
@@ -34,6 +35,7 @@ function openModal(mode,id){
 		modalTitle.innerText = 'Editar imagen';
 		title.value = pictures[id].title;
 		rating.value = pictures[id].rating;
+        dateTaken.value = pictures[id].dateTaken;
 	}
 
 	picture.value = "";
@@ -71,6 +73,7 @@ async function sendData() {
   formData.append("image", picture.files[0]);
   formData.append("title", title.value);
   formData.append("rating", rating.value);
+  formData.append("dateTaken", dateTaken.value);
   if(selectedId>0)
   	formData.append("id",selectedId);
   var response = await fetch(postUrl, {
@@ -97,7 +100,8 @@ function readResponse(data){
 			var picture = {
 				"title":title.value,
 				"image":imgPreview.src,
-				"rating":rating.value
+				"rating":rating.value,
+                "dateTaken":dateTaken.value
 			};
 			pictures[data.msg] = picture;
 			addCard(data.msg,picture);
@@ -106,14 +110,17 @@ function readResponse(data){
 		else{
 			pictures[selectedId].title = title.value;
 			pictures[selectedId].rating = rating.value;
+			pictures[selectedId].dateTaken = dateTaken.value;
 
 			document.getElementById('cardTitle'+selectedId).innerText = title.value;
+            document.getElementById('cardDate'+selectedId).innerText = dateTaken.value;
 
 			let starsContainer = document.getElementById('starsContainer'+selectedId);
 			starsContainer.innerHTML="";
 			starsContainer.appendChild(generateCardRating(selectedId,rating.value));
-
 			new StarRating('#cardRating'+selectedId);
+
+
 
 			selectedId = -1;
 		}
@@ -153,6 +160,10 @@ function addCard(id,values){
 	title.id = "cardTitle"+id;
 	title.innerText = values.title;
 	cardBody.appendChild(title);
+    let dateTaken = document.createElement('p');
+    dateTaken.id = "cardDate"+id;
+    dateTaken.innerText = values.dateTaken;
+    cardBody.appendChild(dateTaken);
 	let starsContainer = document.createElement('div');
 	starsContainer.id = "starsContainer"+id;
 	cardBody.appendChild(starsContainer);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -21,9 +22,11 @@ class PictureController extends Controller
         $response = ["status"=>0,"msg"=>""];
 
 
+
         $validatorRules = [
             "title" => ['required','max:80'],
-            "rating" => ['numeric','max:5']
+            "rating" => ['numeric','max:5'],
+            "dateTaken" => ['date_format:Y-m-d','before:today','nullable'],
         ];
         //Si es edición, se valida que exista la foto
         if($req->has('id')){
@@ -33,7 +36,6 @@ class PictureController extends Controller
         else{
             $validatorRules['image'] = ['required','image','max:3072'];
         }
-
 
         $validator = Validator::make($req->all(),$validatorRules);
 
@@ -63,6 +65,7 @@ class PictureController extends Controller
                     $picture->picture_url = explode("/",$path)[1];
                     $picture->rating = $req->rating;
                     $picture->user_id = Auth::id();
+                    $picture->date_taken = $req->dateTaken;
                     //Guardar la imagen
                     $picture->save();
                 }else{
@@ -71,6 +74,7 @@ class PictureController extends Controller
                     //Actualizarla
                     $picture->picture_name = $req->title;
                     $picture->rating = $req->rating;
+                    $picture->date_taken = $req->dateTaken;
                     $picture->save();
                 }
                 $response["status"] = 20;
