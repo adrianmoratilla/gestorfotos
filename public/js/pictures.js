@@ -30,6 +30,7 @@ function openModal(mode, id) {
     }
     //Modo edición
     else {
+
         selectedId = id;
         imgPreview.src = pictures[id].image;
         imageInputContainer.style.display = 'none';
@@ -190,7 +191,7 @@ function addCard(id, values) {
     row.appendChild(buttonEdit);
 
     let buttonDelete = document.createElement('button');
-    buttonEdit.onclick = function () { confirmDeletion(id) };
+    buttonDelete.onclick = function () { confirmDeletion(id) };
     buttonDelete.classList.add('btn');
     buttonDelete.classList.add('btn-danger');
     buttonDelete.classList.add('col-md-5');
@@ -275,18 +276,18 @@ async function orderPictures(value) {
         }
     }).then((response) => response.json())
     .then((data) => {
-        pictures = data;
-        picturesContainer.innerHTML = "";
-
-        for (let i = 0; i < pictures.length; i++) {
-            pictures[i] = {
-                "id":pictures[i].id,
-                "title": pictures[i].picture_name,
-                "image": window.location.href + "picture/" + pictures[i].picture_url,
-                "rating": pictures[i].rating,
-                "dateTaken": pictures[i].date_taken
+    picturesContainer.innerHTML = "";
+        pictures = {};
+        console.log(data)
+        for (let i = 0; i < data.length; i++) {
+            pictures[data[i].id] = {
+                "title": data[i].picture_name,
+                "image": window.location.href + "picture/" + data[i].picture_url,
+                "rating": data[i].rating,
+                "dateTaken": data[i].date_taken
             };
-            addCard(pictures[i].id, pictures[i])
+           console.log(pictures)
+            addCard(data[i].id, pictures[data[i].id])
         }
     });
 }
