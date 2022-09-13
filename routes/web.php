@@ -27,6 +27,8 @@ Route::middleware('auth')->get('/',[PictureController::class,'home'])->name('hom
 Route::middleware('auth')->post('/save-picture',[PictureController::class,'saveAjax'])->name('save-picture');
 Route::middleware('auth')->get('/picture/{picture}',[PictureController::class,'getPicture'])->name('get-picture');
 Route::middleware('auth')->delete('/remove-picture',[PictureController::class,'removePicture'])->name('remove-picture');
+Route::middleware('auth')->get('/order',[PictureController::class,'orderPictures'])->name('order-pictures');
+
 
 Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
 Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');

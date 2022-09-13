@@ -3,6 +3,18 @@
 @section('content')
 
 	<div class="row mb-5" style="display:flex">
+        {{-- <form> --}}
+        <div>
+        <select id="orderFilter" onchange="orderPictures(this.value)">
+            <option value="picture_name">Alfabético</option>
+            <option value="rating">Calificación</option>
+            <option value="date_taken">Fecha creación</option>
+            <option value="created_at" selected>Fecha de subida</option>
+        </select>
+        <button id="orderButton" onclick="changeOrder()">Ascendente</button>
+    </div>
+        {{-- </form> --}}
+
 		<button id="newPicture" class="btn btn-success offset-10 col-2" onclick="openModal('create')">Añadir</button>
 	</div>
 
@@ -15,7 +27,7 @@
 					<img src="{{route('get-picture',['picture'=>$picture->picture_url])}}" class="card-img-top">
 					<div class="card-body">
 						<h5 id="cardTitle{{$picture->id}}">{{$picture->picture_name}}</h5>
-                        <p id="cardDate{{$picture->id}}">{{$picture->date_taken}}</p>
+                        <p id="cardDate{{$picture->id}}">Foto tomada: {{$picture->date_taken}}</p>
 						<div id="starsContainer{{$picture->id}}">
 							<select class="star-rating" id="cardRating{{$picture->id}}" disabled="">
 								<option></option>
@@ -116,7 +128,9 @@
 	<script type="text/javascript">
 		const postUrl = "{{route('save-picture')}}";
 		const deleteUrl = "{{route('remove-picture')}}";
+        const orderUrl = "{{route('order-pictures')}}"
 		const csrf = "{{csrf_token()}}";
+        var order = "ASC";
 		var pictures = {
             @foreach($pictures as $picture)
 			"{{$picture->id}}":{

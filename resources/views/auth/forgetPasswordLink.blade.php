@@ -35,7 +35,7 @@
 
                           <div class="form-group row">
                               <label for="password-confirm" class="col-md-4 col-form-label text-md-right">Confirmar contraseña</label>
-                              <div class="col-md-6">
+                              <div class="col-md-6 mb-3">
                                   <input type="password" id="password-confirm" class="form-control" name="password_confirmation" required autofocus>
                                   @if ($errors->has('password_confirmation'))
                                       <span class="text-danger">{{ $errors->first('password_confirmation') }}</span>

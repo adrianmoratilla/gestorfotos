@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap-5.1.3-dist/css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/star-rating.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
+
     <style type="text/css">
         form {
             border: solid darkgray 1px;

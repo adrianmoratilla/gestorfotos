@@ -14,8 +14,9 @@ class PictureController extends Controller
 
     public function home(){
 
+        $pictures = Auth::user()->pictures->sortByDesc("created_at");
         //Pintar la vista con las fotos del usuario (si tiene)
-        return view('pictures.list',["pictures" => Auth::user()->pictures->sortByDesc("created_at")]);
+        return view('pictures.list',["pictures" => $pictures]);
     }
 
     public function saveAjax(Request $req){
@@ -26,7 +27,7 @@ class PictureController extends Controller
         $validatorRules = [
             "title" => ['required','max:80'],
             "rating" => ['numeric','max:5'],
-            "dateTaken" => ['date_format:Y-m-d','before:today','nullable'],
+            "dateTaken" => ['date','before:today','nullable'],
         ];
         //Si es edición, se valida que exista la foto
         if($req->has('id')){
@@ -117,6 +118,22 @@ class PictureController extends Controller
         }
 
         return response('Deleted');
+    }
+
+
+    public function orderPictures(Request $req) {
+        $pictures = Auth::user()->pictures;
+        if ($req->order === "ASC"){
+            $pictures = $pictures->sortBy($req->sort);
+        } else {
+            $pictures = $pictures->sortByDesc($req->sort);
+        }
+
+        return $pictures->values()->toJson();
+    }
+
+    public function search(Req $req){
+
     }
 
 }
