@@ -30,7 +30,7 @@
             </a>
             @auth
                 <div class="header_search">
-                    <input type="text" class="input" autocomplete="off" id="searchBox" placeholder="Buscar fotos...">
+                    <input type="text" class="input" autocomplete="off" id="searchBox" placeholder="Buscar fotos..." onkeyup="searchPictures(this.value)">
                     <div class="search_result" id="searchResultContainer">
                     </div>
                 </div>

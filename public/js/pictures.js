@@ -278,7 +278,7 @@ async function orderPictures(value) {
     .then((data) => {
     picturesContainer.innerHTML = "";
         pictures = {};
-        console.log(data)
+
         for (let i = 0; i < data.length; i++) {
             pictures[data[i].id] = {
                 "title": data[i].picture_name,
@@ -286,7 +286,7 @@ async function orderPictures(value) {
                 "rating": data[i].rating,
                 "dateTaken": data[i].date_taken
             };
-           console.log(pictures)
+
             addCard(data[i].id, pictures[data[i].id])
         }
     });
@@ -299,4 +299,28 @@ function changeOrder() {
     orderPictures(document.getElementById("orderFilter").value)
 }
 
-// async function searchPictures(){}
+async function searchPictures(searchValue){
+    let query = searchValue;
+    await fetch(searchUrl + "?search=" + searchValue, {
+        method: "GET",
+        credentials: 'include',
+        headers: {
+            'X-CSRF-TOKEN': csrf
+        }
+}).then((response) => response.json())
+.then((data) => {
+picturesContainer.innerHTML = "";
+    pictures = {};
+
+    for (let i = 0; i < data.length; i++) {
+        pictures[data[i].id] = {
+            "title": data[i].picture_name,
+            "image": window.location.href + "picture/" + data[i].picture_url,
+            "rating": data[i].rating,
+            "dateTaken": data[i].date_taken
+        };
+
+        addCard(data[i].id, pictures[data[i].id])
+    }
+});;
+}

@@ -128,7 +128,8 @@
 	<script type="text/javascript">
 		const postUrl = "{{route('save-picture')}}";
 		const deleteUrl = "{{route('remove-picture')}}";
-        const orderUrl = "{{route('order-pictures')}}"
+        const orderUrl = "{{route('order-pictures')}}";
+        const searchUrl = "{{route('search-pictures')}}";
 		const csrf = "{{csrf_token()}}";
         var order = "ASC";
 		var pictures = {

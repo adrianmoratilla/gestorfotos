@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Picture;
+use Illuminate\Support\Facades\DB;
 
 class PictureController extends Controller
 {
@@ -132,8 +133,16 @@ class PictureController extends Controller
         return $pictures->values()->toJson();
     }
 
-    public function search(Req $req){
+    public function searchPictures(Request $req){
+        if ($req->has('search')){
+            $pictures = DB::table('pictures')
+            ->where('user_id', "=", Auth::user()->id)
+            ->where('picture_name', 'like', '%'.$req->search.'%')
+            ->get();
 
+            // $pictures = Auth::user()->pictures->where('picture_name', 'LIKE', '%'.$req->search.'%');
+        }
+
+        return $pictures->values()->toJson();
     }
-
 }
