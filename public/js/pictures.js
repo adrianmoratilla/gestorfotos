@@ -294,9 +294,9 @@ async function orderPictures(value) {
 
 function changeOrder() {
     let button = document.getElementById("orderButton");
-    button.innerText = order === "ASC" ? "Ascendiente" : "Descendiente";
+    button.innerText = order === "ASC" ? "Ascendente" : "Descendente";
     order = order === "ASC" ? "DESC" : "ASC";
-    orderPictures(document.getElementById("orderFilter").value)
+    orderPictures(document.getElementById("inputGroupSelect04").value)
 }
 
 async function searchPictures(searchValue){
