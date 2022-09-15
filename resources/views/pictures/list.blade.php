@@ -11,7 +11,7 @@
             <select class="custom-select" id="inputGroupSelect04" onchange="orderPictures(this.value)">
                 <option value="picture_name">Alfabético</option>
                 <option value="rating">Calificación</option>
-                <option value="date_taken">Fecha creación</option>
+                <option value="date_taken">Fecha de captura</option>
                 <option value="created_at" selected>Fecha de subida</option>
             </select>
             <div class="input-group-append">
@@ -28,10 +28,11 @@
         @else
             @foreach ($pictures as $picture)
                 <div class="card col-md-4 col-sm-6 col-12" id="img-{{ $picture->id }}">
-                    <img src="{{ route('get-picture', ['picture' => $picture->picture_url]) }}" class="card-img-top">
+                    <img src ={{ route('get-picture', ['picture' => $picture->picture_url]) }} class="card-img-top">
                     <div class="card-body">
                         <h5 id="cardTitle{{ $picture->id }}">{{ $picture->picture_name }}</h5>
-                        <p id="cardDate{{ $picture->id }}">Foto tomada: {{ $picture->date_taken }}</p>
+                        <p id="cardDate{{ $picture->id }}">Fecha de captura: {{ $picture->date_taken }}</p>
+                        <p id="createDate{{ $picture->id }}">Fecha de subida: {{ $picture->created_at->format("Y-m-d")}}</p>
                         <div id="starsContainer{{ $picture->id }}">
                             <select class="star-rating" id="cardRating{{ $picture->id }}" disabled="">
                                 <option></option>
@@ -44,9 +45,9 @@
                         </div>
                         <div class="row mt-3">
                             <button class="btn btn-primary col-md-5 col-sm-6 col-12"
-                                onclick="openModal('edit',{{ $picture->id }})">Editar</button>
+                            onclick="openModal('edit',{{ $picture->id }})">Editar</button>
                             <button class="btn btn-danger col-md-5 col-sm-6 col-12 offset-md-2"
-                                onclick="confirmDeletion({{ $picture->id }})">Borrar</button>
+                            onclick="confirmDeletion({{ $picture->id }})">Borrar</button>
                         </div>
                     </div>
                 </div>
@@ -144,7 +145,8 @@
                     "title": "{{ $picture->picture_name }}",
                     "image": "{{ route('get-picture', ['picture' => $picture->picture_url]) }}",
                     "rating": "{{ $picture->rating }}",
-                    "dateTaken": "{{ $picture->date_taken }}"
+                    "dateTaken": "{{ $picture->date_taken }}",
+                    "createDate": "{{ $picture->created_at->format("Y-m-d")}}"
                 },
             @endforeach
         };

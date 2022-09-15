@@ -6,8 +6,22 @@
     margin-left: 1%;
 }
 
-.card img{
+.card-img-top{
     margin-top: 2%;
+}
+
+.card-body {
+    height: 240px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+}
+
+.card img{
+    object-fit: cover;
+    margin-top: 2%;
+    height: 410px;
 }
 
 .header_search input {

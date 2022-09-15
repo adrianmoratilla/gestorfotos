@@ -13,21 +13,13 @@ use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
 {
-      /**
-       * Write code on Method
-       *
-       * @return response()
-       */
+
       public function showForgetPasswordForm()
       {
          return view('auth.forgetPassword');
       }
 
-      /**
-       * Write code on Method
-       *
-       * @return response()
-       */
+
       public function submitForgetPasswordForm(Request $request)
       {
           $request->validate([
@@ -50,20 +42,11 @@ class ForgotPasswordController extends Controller
 
           return back()->with('message', 'Te hemos enviado un enlace para restablecer tu contraseña, ¡revisa tu correo!');
       }
-      /**
-       * Write code on Method
-       *
-       * @return response()
-       */
+
       public function showResetPasswordForm($token) {
          return view('auth.forgetPasswordLink', ['token' => $token]);
       }
 
-      /**
-       * Write code on Method
-       *
-       * @return response()
-       */
       public function submitResetPasswordForm(Request $request)
       {
           $request->validate([

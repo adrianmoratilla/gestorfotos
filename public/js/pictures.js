@@ -164,8 +164,12 @@ function addCard(id, values) {
     cardBody.appendChild(title);
     let dateTaken = document.createElement('p');
     dateTaken.id = "cardDate" + id;
-    dateTaken.innerText = values.dateTaken;
+    dateTaken.innerText = "Fecha de captura: " + values.dateTaken;
     cardBody.appendChild(dateTaken);
+    let createDate = document.createElement('p');
+    createDate.id = "createDate" + id;
+    createDate.innerText = "Fecha de captura: " + values.createDate;
+    cardBody.appendChild(createDate);
     let starsContainer = document.createElement('div');
     starsContainer.id = "starsContainer" + id;
     cardBody.appendChild(starsContainer);
@@ -275,21 +279,22 @@ async function orderPictures(value) {
             'X-CSRF-TOKEN': csrf
         }
     }).then((response) => response.json())
-    .then((data) => {
-    picturesContainer.innerHTML = "";
-        pictures = {};
+        .then((data) => {
+            picturesContainer.innerHTML = "";
+            pictures = {};
+            for (let i = 0; i < data.length; i++) {
+                pictures[data[i].id] = {
+                    "title": data[i].picture_name,
+                    "image": window.location.href + "picture/" + data[i].picture_url,
+                    "rating": data[i].rating,
+                    "dateTaken": data[i].date_taken,
+                    "createDate":  data[i].created_at.substring(0, 10)
+                };
 
-        for (let i = 0; i < data.length; i++) {
-            pictures[data[i].id] = {
-                "title": data[i].picture_name,
-                "image": window.location.href + "picture/" + data[i].picture_url,
-                "rating": data[i].rating,
-                "dateTaken": data[i].date_taken
-            };
-
-            addCard(data[i].id, pictures[data[i].id])
+                addCard(data[i].id, pictures[data[i].id])
+            }
         }
-    });
+    );
 }
 
 function changeOrder() {
@@ -299,7 +304,7 @@ function changeOrder() {
     orderPictures(document.getElementById("inputGroupSelect04").value)
 }
 
-async function searchPictures(searchValue){
+async function searchPictures(searchValue) {
     let query = searchValue;
     await fetch(searchUrl + "?search=" + searchValue, {
         method: "GET",
@@ -307,20 +312,27 @@ async function searchPictures(searchValue){
         headers: {
             'X-CSRF-TOKEN': csrf
         }
-}).then((response) => response.json())
-.then((data) => {
-picturesContainer.innerHTML = "";
-    pictures = {};
+    }).then((response) => response.json())
+        .then((data) => {
+            picturesContainer.innerHTML = "";
+            if (data.length > 0) {
+                console.log(data.length);
+                pictures = {};
 
-    for (let i = 0; i < data.length; i++) {
-        pictures[data[i].id] = {
-            "title": data[i].picture_name,
-            "image": window.location.href + "picture/" + data[i].picture_url,
-            "rating": data[i].rating,
-            "dateTaken": data[i].date_taken
-        };
+                for (let i = 0; i < data.length; i++) {
+                    pictures[data[i].id] = {
+                        "title": data[i].picture_name,
+                        "image": window.location.href + "picture/" + data[i].picture_url,
+                        "rating": data[i].rating,
+                        "dateTaken": data[i].date_taken,
+                        "createDate": data[i].created_at.substring(0, 10)
+                    };
 
-        addCard(data[i].id, pictures[data[i].id])
-    }
-});;
+                    addCard(data[i].id, pictures[data[i].id])
+                }
+            } else {
+                picturesContainer.innerHTML = '<h2 style="text-align:center;">No se encuentra ninguna foto con ese título</h2>';
+            }
+
+        });;
 }
