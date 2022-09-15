@@ -103,7 +103,8 @@ function readResponse(data) {
                 "title": title.value,
                 "image": imgPreview.src,
                 "rating": rating.value,
-                "dateTaken": dateTaken.value
+                "dateTaken": dateTaken.value,
+                "createDate": new Date().toISOString().slice(0, 10)
             };
             pictures[data.msg] = picture;
             addCard(data.msg, picture);
@@ -168,7 +169,7 @@ function addCard(id, values) {
     cardBody.appendChild(dateTaken);
     let createDate = document.createElement('p');
     createDate.id = "createDate" + id;
-    createDate.innerText = "Fecha de captura: " + values.createDate;
+    createDate.innerText = "Fecha de subida: " + values.createDate;
     cardBody.appendChild(createDate);
     let starsContainer = document.createElement('div');
     starsContainer.id = "starsContainer" + id;
@@ -334,5 +335,5 @@ async function searchPictures(searchValue) {
                 picturesContainer.innerHTML = '<h2 style="text-align:center;">No se encuentra ninguna foto con ese título</h2>';
             }
 
-        });;
+        });
 }
