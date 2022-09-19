@@ -25,7 +25,8 @@ class UserController extends Controller
             return redirect()->intended(route('home'));
         }
         return redirect(route('login'))->withInput()->withErrors([
-            'name' => 'Las credenciales introducidas no son correctas.'
+            'name' => 'Las credenciales introducidas no son correctas.',
+            'password' => 'La contraseña es incorrecta.'
         ]);
     }
 

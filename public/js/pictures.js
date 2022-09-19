@@ -272,8 +272,10 @@ async function removePicture() {
 }
 
 async function orderPictures(value) {
-    //Enviar la solicitud de
-    await fetch(orderUrl + "?sort=" + value + "&order=" + order, {
+    let startDate = document.getElementById("startDate").value;
+    let endDate = document.getElementById("endDate").value+" 23:59:59";
+    console.log(endDate);
+    await fetch(orderUrl + "?sort=" + value + "&order=" + order + "&startDate=" + startDate + "&endDate=" + endDate, {
         method: "GET",
         credentials: 'include',
         headers: {
@@ -289,13 +291,13 @@ async function orderPictures(value) {
                     "image": window.location.href + "picture/" + data[i].picture_url,
                     "rating": data[i].rating,
                     "dateTaken": data[i].date_taken,
-                    "createDate":  data[i].created_at.substring(0, 10)
+                    "createDate": data[i].created_at.substring(0, 10)
                 };
 
                 addCard(data[i].id, pictures[data[i].id])
             }
         }
-    );
+        );
 }
 
 function changeOrder() {
@@ -306,7 +308,7 @@ function changeOrder() {
 }
 
 async function searchPictures(searchValue) {
-    let query = searchValue;
+
     await fetch(searchUrl + "?search=" + searchValue, {
         method: "GET",
         credentials: 'include',
@@ -336,4 +338,37 @@ async function searchPictures(searchValue) {
             }
 
         });
+}
+
+
+function showPicture(ev){
+    let previousPicture = document.getElementById('pictures').lastElementChild;
+    let nextPicture = document.getElementById('pictures').firstElementChild;
+    let imgSrc = "";
+
+    if (!ev.target.dataset.id){
+        imgSrc = ev.target.src;
+        previousPicture = ev.target.parentNode.previousElementSibling || previousPicture;
+        nextPicture = ev.target.parentNode.nextElementSibling || nextPicture;
+    } else {
+        imgSrc = document.getElementById(ev.target.dataset.id).firstElementChild.src;
+        previousPicture = document.getElementById(ev.target.dataset.id).previousElementSibling  || previousPicture;
+        nextPicture = document.getElementById(ev.target.dataset.id).nextElementSibling || nextPicture;
+    }
+
+    document.getElementById('modalPicture').style.display = "block";
+    document.getElementById('modalImg').src = imgSrc;
+    document.getElementById('previousButton').dataset.id = previousPicture.id;
+    document.getElementById('nextButton').dataset.id = nextPicture.id;
+}
+
+
+function showFilter() {
+    let filter = document.getElementById('filterContainer')
+
+    filter.style.display = filter.style.display == "none" ? "flex" : "none"
+}
+
+function closeModal(){
+    document.getElementById('modalPicture').style.display = "none";
 }

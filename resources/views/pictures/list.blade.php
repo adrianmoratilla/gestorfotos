@@ -4,19 +4,35 @@
 
     <div class="row mb-5" style="display:flex; justify-content: space-between">
         <div class="input-group" style="width:40%">
-            <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect04" onclick="showFilter()"><i class="bi bi-funnel-fill"></i></label>
+            <div style=display:flex>
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect04" onclick="showFilter()"><i
+                            class="bi bi-funnel-fill"></i></label>
+                </div>
+                <div id="filterContainer">
+
+                    <select class="custom-select" id="inputGroupSelect04" onchange="orderPictures(this.value)">
+                        <option value="picture_name">Alfabético</option>
+                        <option value="rating">Calificación</option>
+                        <option value="date_taken">Fecha de captura</option>
+                        <option value="created_at" selected>Fecha de subida</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button id="orderButton" class="btn btn-outline-secondary"
+                            onclick="changeOrder()">Ascendente</button>
+                    </div>
+                </div>
             </div>
-            <div id="filterContainer">
-            <select class="custom-select" id="inputGroupSelect04" onchange="orderPictures(this.value)">
-                <option value="picture_name">Alfabético</option>
-                <option value="rating">Calificación</option>
-                <option value="date_taken">Fecha de captura</option>
-                <option value="created_at" selected>Fecha de subida</option>
-            </select>
-            <div class="input-group-append">
-                <button id="orderButton" class="btn btn-outline-secondary" onclick="changeOrder()">Ascendente</button>
-            </div>
+            <div class="input-group" id="dateSelector" style="display:flex">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="">Inicio y fin</span>
+                </div>
+                <input type="date" id="startDate" class="form-control">
+                <input type="date" id="endDate" class="form-control">
+                <div class="input-group-append">
+                    <button id="orderButton" class="btn btn-outline-secondary" onclick="orderPictures()"><i
+                            class="bi bi-funnel"></i></button>
+                </div>
             </div>
         </div>
         <button id="newPicture" class="btn btn-success col-2" onclick="openModal('create')">Añadir</button>
@@ -28,11 +44,13 @@
         @else
             @foreach ($pictures as $picture)
                 <div class="card col-md-4 col-sm-6 col-12" id="img-{{ $picture->id }}">
-                    <img src ={{ route('get-picture', ['picture' => $picture->picture_url]) }} class="card-img-top">
+                    <img src={{ route('get-picture', ['picture' => $picture->picture_url]) }} class="card-img-top"
+                        onclick="showPicture(event)">
                     <div class="card-body">
                         <h5 id="cardTitle{{ $picture->id }}">{{ $picture->picture_name }}</h5>
                         <p id="cardDate{{ $picture->id }}">Fecha de captura: {{ $picture->date_taken }}</p>
-                        <p id="createDate{{ $picture->id }}">Fecha de subida: {{ $picture->created_at->format("Y-m-d")}}</p>
+                        <p id="createDate{{ $picture->id }}">Fecha de subida: {{ $picture->created_at->format('Y-m-d') }}
+                        </p>
                         <div id="starsContainer{{ $picture->id }}">
                             <select class="star-rating" id="cardRating{{ $picture->id }}" disabled="">
                                 <option></option>
@@ -45,16 +63,29 @@
                         </div>
                         <div class="row mt-3">
                             <button class="btn btn-primary col-md-5 col-sm-6 col-12"
-                            onclick="openModal('edit',{{ $picture->id }})">Editar</button>
+                                onclick="openModal('edit',{{ $picture->id }})">Editar</button>
                             <button class="btn btn-danger col-md-5 col-sm-6 col-12 offset-md-2"
-                            onclick="confirmDeletion({{ $picture->id }})">Borrar</button>
+                                onclick="confirmDeletion({{ $picture->id }})">Borrar</button>
                         </div>
                     </div>
                 </div>
             @endforeach
         @endif
     </section>
-
+    <div class="modal" id="modalPicture" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal()"></button>
+            <div class="modal-body">
+                <img id="modalImg">
+            </div>
+            <a class="carousel-control-prev" role="button">
+                <span class="carousel-control-prev-icon" aria-hidden="true" id="previousButton" onclick="showPicture(event)"></span>
+            </a>
+            <a class="carousel-control-next" role="button">
+                <span class="carousel-control-next-icon" aria-hidden="true" id="nextButton" onclick="showPicture(event)"></span>
+            </a>
+        </div>
+    </div>
     <div id="modalForm" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -146,16 +177,12 @@
                     "image": "{{ route('get-picture', ['picture' => $picture->picture_url]) }}",
                     "rating": "{{ $picture->rating }}",
                     "dateTaken": "{{ $picture->date_taken }}",
-                    "createDate": "{{ $picture->created_at->format("Y-m-d")}}"
+                    "createDate": "{{ $picture->created_at->format('Y-m-d') }}"
                 },
             @endforeach
         };
 
-        function showFilter(){
-            let filter = document.getElementById('filterContainer')
 
-            filter.style.display = filter.style.display == "none" ? "flex" : "none"
-        }
     </script>
 
     <script type="text/javascript" src="{{ asset('js/pictures.js') }}"></script>

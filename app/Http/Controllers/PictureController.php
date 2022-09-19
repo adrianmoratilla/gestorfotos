@@ -124,10 +124,19 @@ class PictureController extends Controller
 
     public function orderPictures(Request $req) {
         $pictures = Auth::user()->pictures;
-        if ($req->order === "ASC"){
-            $pictures = $pictures->sortBy($req->sort);
-        } else {
-            $pictures = $pictures->sortByDesc($req->sort);
+
+        if($req->has('startDate')){
+            // dd(date('Y-m-d H:m:s', strtotime($req->startDate)));
+            $pictures = $pictures->whereBetween('created_at', [date('Y-m-d H:m:s', strtotime($req->startDate)), date('Y-m-d H:m:s', strtotime($req->endDate )) ]);
+            // $pictures = $pictures->where('date_taken', '>', $req->startDate)->where('date_taken', '<', $req->endDate);
+        }
+        // dd($pictures);
+        if($req->has('sort')){
+            if ($req->order === "ASC"){
+                $pictures = $pictures->sortBy($req->sort);
+            } else {
+                $pictures = $pictures->sortByDesc($req->sort);
+            }
         }
 
         return $pictures->values()->toJson();
@@ -139,10 +148,8 @@ class PictureController extends Controller
             ->where('user_id', "=", Auth::user()->id)
             ->where('picture_name', 'like', '%'.$req->search.'%')
             ->get();
-
-            // $pictures = Auth::user()->pictures->where('picture_name', 'LIKE', '%'.$req->search.'%');
         }
-
         return $pictures->values()->toJson();
     }
+
 }

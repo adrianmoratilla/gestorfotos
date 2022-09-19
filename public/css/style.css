@@ -6,7 +6,7 @@
     margin-left: 1%;
 }
 
-.card-img-top{
+.card-img-top {
     margin-top: 2%;
 }
 
@@ -18,10 +18,13 @@
     justify-content: space-around;
 }
 
-.card img{
+.card img {
     object-fit: cover;
     margin-top: 2%;
     height: 410px;
+    cursor: -moz-zoom-in;
+    cursor: -webkit-zoom-in;
+    cursor: zoom-in;
 }
 
 .header_search input {
@@ -33,14 +36,45 @@
 
 }
 
-#filterContainer{
-    display:none;
+#filterContainer {
+    display: none;
 }
 
 
+.modal-dialog-centered {
+    flex-direction: column;
+}
+
+#modalImg {
+    height: 85vh;
+    object-fit: contain;
+}
+
+#modalPicture {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#nextButton, #previousButton, .btn-close {
+    pointer-events: auto;
+}
+
+.btn-close{
+    position: absolute;
+    right: 2%;
+}
+
+#modalPicture .modal-body{
+    background-color: white;
+}
 
 @media (min-width: 768px) {
     .col-md-4 {
         width: 32.333333%;
+    }
+}
+
+@media (min-width: 576px) {
+    #modalPicture .modal-dialog {
+        max-width: 100%;
     }
 }
