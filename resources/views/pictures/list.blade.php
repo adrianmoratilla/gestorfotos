@@ -2,40 +2,46 @@
 
 @section('content')
 
-    <div class="row mb-5" style="display:flex; justify-content: space-between">
-        <div class="input-group" style="width:40%">
-            <div style=display:flex>
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect04" onclick="showFilter()"><i
-                            class="bi bi-funnel-fill"></i></label>
-                </div>
-                <div id="filterContainer">
+    <div class="buttonContainer mb-3">
 
-                    <select class="custom-select" id="inputGroupSelect04" onchange="orderPictures(this.value)">
-                        <option value="picture_name">Alfabético</option>
-                        <option value="rating">Calificación</option>
-                        <option value="date_taken">Fecha de captura</option>
-                        <option value="created_at" selected>Fecha de subida</option>
-                    </select>
-                    <div class="input-group-append">
-                        <button id="orderButton" class="btn btn-outline-secondary"
-                            onclick="changeOrder()">Ascendente</button>
-                    </div>
-                </div>
+        <button class="btn btn-secondary" type="button" id="orderSelect" title="Orden" onclick="showFilter()">
+            Fecha de subida <i class="bi bi-caret-down"></i>
+        </button>
+        <div class="dropdown-menu" id="filterContainer">
+            <option class="dropdown-item" type="button" value="picture_name" onclick="filterPictures(event.target)">Alfabético</option>
+            <option class="dropdown-item" type="button" value="rating" onclick="filterPictures(event.target)">Calificación</option>
+            <option class="dropdown-item" type="button" value="date_taken" onclick="filterPictures(event.target)">Fecha captura</option>
+            {{-- <option class="dropdown-item" type="button" value="created_at" onclick="filterPictures(event.target)">Fecha de subida</option> --}}
+        </div>
+
+        <button id="orderButton" class="btn btn-outline-secondary" onclick="changeOrder(event.target)"
+            title="Cambiar orden ascendente/descendente">
+            <i class="bi bi-sort-down"></i>
+        </button>
+
+        <button id="orderButton" class="btn btn-outline-secondary" onclick="showDates()" title="Filtrar por fecha">
+            <i class="bi bi-funnel"></i>
+        </button>
+
+        <button id="newPicture" class="btn btn-success" onclick="openModal('create')" title="Añadir nueva foto">
+            <i class="bi bi-plus-circle"></i>
+        </button>
+    </div>
+
+    <div class="row mb-3" id="dateContainer" style="display:none">
+        <div class="input-group" id="dateSelector">
+            <div class="form-floating mb-3">
+                <input type="date" id="startDate" class="form-control" onchange="filterPictures()" onkeydown="return false">
+                <label for="startDate">Desde:</label>
             </div>
-            <div class="input-group" id="dateSelector" style="display:flex">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="">Inicio y fin</span>
-                </div>
-                <input type="date" id="startDate" class="form-control">
-                <input type="date" id="endDate" class="form-control">
-                <div class="input-group-append">
-                    <button id="orderButton" class="btn btn-outline-secondary" onclick="orderPictures()"><i
-                            class="bi bi-funnel"></i></button>
-                </div>
+
+            <div class="form-floating mb-3">
+                <input type="date" id="endDate" class="form-control" onchange="filterPictures()" onkeydown="return false">
+                <label for="endDate">Hasta:</label>
             </div>
         </div>
-        <button id="newPicture" class="btn btn-success col-2" onclick="openModal('create')">Añadir</button>
+        <div class="alert alert-danger" id="dateErrors" style="display:none"></div>
+        </div>
     </div>
 
     <section id="pictures" class="row g-3 gap" style="margin-bottom: 2%">
@@ -48,9 +54,8 @@
                         onclick="showPicture(event)">
                     <div class="card-body">
                         <h5 id="cardTitle{{ $picture->id }}">{{ $picture->picture_name }}</h5>
-                        <p id="cardDate{{ $picture->id }}">Fecha de captura: {{ $picture->date_taken }}</p>
-                        <p id="createDate{{ $picture->id }}">Fecha de subida: {{ $picture->created_at->format('Y-m-d') }}
-                        </p>
+                        <p id="cardDate{{ $picture->id }}">Tomada el {{date('d-m-Y',$picture->date_taken)}}</p>
+                        {{-- <p id="createDate{{ $picture->id }}">Fecha de subida: {{ $picture->created_at->format('Y-m-d') }}</p> --}}
                         <div id="starsContainer{{ $picture->id }}">
                             <select class="star-rating" id="cardRating{{ $picture->id }}" disabled="">
                                 <option></option>
@@ -74,15 +79,19 @@
     </section>
     <div class="modal" id="modalPicture" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal()"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                onclick="closeModal()"></button>
             <div class="modal-body">
                 <img id="modalImg">
+                <h4 id="modalTitle"></h4>
             </div>
             <a class="carousel-control-prev" role="button">
-                <span class="carousel-control-prev-icon" aria-hidden="true" id="previousButton" onclick="showPicture(event)"></span>
+                <span class="carousel-control-prev-icon" aria-hidden="true" id="previousButton"
+                    onclick="showPicture(event)"></span>
             </a>
             <a class="carousel-control-next" role="button">
-                <span class="carousel-control-next-icon" aria-hidden="true" id="nextButton" onclick="showPicture(event)"></span>
+                <span class="carousel-control-next-icon" aria-hidden="true" id="nextButton"
+                    onclick="showPicture(event)"></span>
             </a>
         </div>
     </div>
@@ -90,7 +99,6 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle">Modal title</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -166,8 +174,8 @@
     <script type="text/javascript">
         const postUrl = "{{ route('save-picture') }}";
         const deleteUrl = "{{ route('remove-picture') }}";
-        const orderUrl = "{{ route('order-pictures') }}";
-        const searchUrl = "{{ route('search-pictures') }}";
+        const filterUrl = "{{ route('filter-pictures') }}";
+
         const csrf = "{{ csrf_token() }}";
         var order = "ASC";
         var pictures = {
@@ -177,11 +185,10 @@
                     "image": "{{ route('get-picture', ['picture' => $picture->picture_url]) }}",
                     "rating": "{{ $picture->rating }}",
                     "dateTaken": "{{ $picture->date_taken }}",
-                    "createDate": "{{ $picture->created_at->format('Y-m-d') }}"
+                    // "createDate": "{{ $picture->created_at->format('Y-m-d') }}"
                 },
             @endforeach
         };
-
 
     </script>
 

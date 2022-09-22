@@ -24,22 +24,21 @@
     <div class="container">
         <header
             class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-            <a class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+            <a class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none" id="headerTitle">
                 @auth
-                    Las fotos de {{ Auth::user()->name }}
+                    <h1>Fotos de {{ ucwords(Auth::user()->name) }}</h1>
                 @endauth
             </a>
-            @auth
-                <div class="header_search">
-                    <input type="text" class="input" autocomplete="off" id="searchBox" placeholder="Buscar fotos..." onkeyup="searchPictures(this.value)">
-                    <div class="search_result" id="searchResultContainer">
-                    </div>
-                </div>
-            @endauth
             <div class="col-md-3 text-end">
                 @auth
+                <div class="input-group" style="margin-right: 5%">
+                    <input type="text" class="form-control" autocomplete="off" id="searchBox" placeholder="Buscar fotos..." onkeyup="filterPictures(event.target)" style="display:none">
+                    <div class="input-group-append" onclick="showSearch()">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    </div>
+                </div>
                     <a href="{{ route('logout') }}"><button type="button"
-                            class="btn btn-outline-primary me-2">Salir</button></a>
+                            class="btn btn-outline-primary me-2"><i class="bi bi-box-arrow-right"></i></button></a>
                 @else
                     <a href="{{ route('login') }}"><button type="button"
                             class="btn btn-outline-primary me-2">Entrar</button></a>

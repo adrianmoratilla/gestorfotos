@@ -1,13 +1,53 @@
-/* .gap {
-    gap: 10px;
-} */
+@import url('http://fonts.cdnfonts.com/css/chalkduster');
+
+header h1{
+    font-size: xx-large;
+    font-weight: 500;
+}
+
+#headerTitle{
+    width: auto;
+}
+
+@media only screen and (max-width: 768px){
+    #headerTitle{
+        margin: 0 auto;
+    }
+}
+
+header .input-group {
+    width: auto;
+}
 
 .card {
     margin-left: 1%;
 }
 
+.buttonContainer{
+    display: flex;
+    justify-content: space-between;
+    width: 30%;
+    margin-left: auto;
+}
+
+#orderSelect {
+    position: relative;
+    white-space: nowrap;
+    width: 175px;
+    text-align: right;
+}
+
+.dropdown-menu {
+    top:15%;
+}
+
 .card-img-top {
     margin-top: 2%;
+}
+
+.row .mb-5 {
+    display:flex;
+    justify-content: space-between !important
 }
 
 .card-body {
@@ -27,12 +67,14 @@
     cursor: zoom-in;
 }
 
-.header_search input {
-    width: 20vw;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-weight: 500;
-    z-index: 700;
+#searchBox{
+    width: 45%;
+}
+
+.text-end{
+    display: flex;
+    justify-content: flex-end;
+    width: 50%;
 
 }
 
@@ -48,6 +90,7 @@
 #modalImg {
     height: 85vh;
     object-fit: contain;
+    width: 100%;
 }
 
 #modalPicture {
@@ -61,20 +104,148 @@
 .btn-close{
     position: absolute;
     right: 2%;
+    z-index: 400;
 }
 
 #modalPicture .modal-body{
     background-color: white;
+    width: auto;
 }
 
-@media (min-width: 768px) {
+.bi-caret-down {
+    margin-left: 2%
+}
+
+#dateSelector {
+    width: 31.5%;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin-left: auto;
+}
+
+#modalPicture h4{
+    font-family: 'Chalkduster', sans-serif;
+}
+@media only screen and (min-width: 768px) {
     .col-md-4 {
         width: 32.333333%;
     }
 }
 
-@media (min-width: 576px) {
+/* @media (min-width: 576px){
+.col-sm-6 {
+    flex: 0 0 auto;
+    width: 90%;
+} */
+
+
+@media only screen and (min-width: 576px) {
     #modalPicture .modal-dialog {
         max-width: 100%;
     }
 }
+
+@media only screen and(min-width: 576px){
+    .col-sm-6 {
+        width: 49% !important;
+    }
+}
+
+
+@media only screen and (max-width: 1200px){
+    .buttonContainer{
+        width: 37%;
+    }
+
+    #dateSelector{
+        width: 37.5%;
+    }
+}
+
+
+
+@media only screen and (max-width: 1024px){
+    .buttonContainer{
+        width: 50%;
+    }
+
+    #dateSelector{
+        width: 51.5%;
+    }
+}
+
+@media only screen and (max-width: 991px){
+    .card{
+        width: 48%;
+    }
+
+    .modal-body{
+        flex: none !important;
+    }
+
+    #modalImg {
+        height: auto;
+    }
+
+
+    #modalPicture .modal-body{
+        width: auto;
+        max-height: 845px;
+        margin: auto 0;
+
+    }
+}
+
+@media only screen and (max-width: 768px){
+    .buttonContainer{
+        width: 60%;
+    }
+    .text-end{
+        width: 100%;
+        justify-content: space-between;
+    }
+    .card img {
+        height: 250px;
+    }
+
+    .card-body {
+        height: 175px;
+    }
+
+    #dateSelector{
+        width: 67%;
+    }
+}
+
+@media only screen and (max-width: 576px){
+    .card-body {
+        height: 200px;
+    }
+}
+
+@media only screen and (max-width: 550px){
+    .buttonContainer{
+        width: 100%;
+    }
+
+    #dateSelector{
+        width: 100%;
+    }
+
+    #modalImg{
+        height: auto;
+    }
+
+
+
+}
+
+
+
+
+
+
+
+
+
+

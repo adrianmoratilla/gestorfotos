@@ -37,7 +37,7 @@ function openModal(mode, id) {
         modalTitle.innerText = 'Editar imagen';
         title.value = pictures[id].title;
         rating.value = pictures[id].rating;
-        dateTaken.value = pictures[id].dateTaken;
+        dateTaken.value = getTimestampFromUnix(pictures[id].dateTaken);
     }
 
     picture.value = "";
@@ -104,8 +104,9 @@ function readResponse(data) {
                 "image": imgPreview.src,
                 "rating": rating.value,
                 "dateTaken": dateTaken.value,
-                "createDate": new Date().toISOString().slice(0, 10)
+                // "createDate": new Date().toISOString().slice(0, 10)
             };
+
             pictures[data.msg] = picture;
             addCard(data.msg, picture);
         }
@@ -153,6 +154,7 @@ function addCard(id, values) {
     card.id = "img-" + id;
     let img = document.createElement('img');
     img.src = values.image;
+    img.onclick = function(){showPicture(event)};
     img.classList.add('card-img-top');
     card.appendChild(img);
     let cardBody = document.createElement('div');
@@ -165,12 +167,12 @@ function addCard(id, values) {
     cardBody.appendChild(title);
     let dateTaken = document.createElement('p');
     dateTaken.id = "cardDate" + id;
-    dateTaken.innerText = "Fecha de captura: " + values.dateTaken;
+    dateTaken.innerText = "Tomada el " + formatUnix(values.dateTaken);
     cardBody.appendChild(dateTaken);
-    let createDate = document.createElement('p');
-    createDate.id = "createDate" + id;
-    createDate.innerText = "Fecha de subida: " + values.createDate;
-    cardBody.appendChild(createDate);
+    // let createDate = document.createElement('p');
+    // createDate.id = "createDate" + id;
+    // createDate.innerText = "Fecha de subida: " + values.createDate;
+    // cardBody.appendChild(createDate);
     let starsContainer = document.createElement('div');
     starsContainer.id = "starsContainer" + id;
     cardBody.appendChild(starsContainer);
@@ -271,45 +273,37 @@ async function removePicture() {
     selectedId = -1;
 }
 
-async function orderPictures(value) {
+async function filterPictures(ev) {
+
+    let query = "?order="+order;
     let startDate = document.getElementById("startDate").value;
-    let endDate = document.getElementById("endDate").value+" 23:59:59";
-    console.log(endDate);
-    await fetch(orderUrl + "?sort=" + value + "&order=" + order + "&startDate=" + startDate + "&endDate=" + endDate, {
-        method: "GET",
-        credentials: 'include',
-        headers: {
-            'X-CSRF-TOKEN': csrf
+    let endDate = document.getElementById("endDate").value;
+    let searchValue = document.getElementById("searchBox").value;
+    let orderBy = document.getElementById("orderSelect").value;
+
+    query += searchValue ? "&search=" + searchValue : "";
+    query += orderBy ? "&sort=" + orderBy : "";
+
+    if (startDate){
+        if (startDate && endDate && Date.parse(startDate) > Date.parse(endDate)) {
+            let error = document.getElementById("dateErrors");
+            error.innerText = "Las fechas introducidas no son válidas";
+            error.style.display = "block";
+        } else {
+            query += startDate ? "&startDate=" + startDate : "";
+            query += endDate ? "&endDate=" + endDate : "";
         }
-    }).then((response) => response.json())
-        .then((data) => {
-            picturesContainer.innerHTML = "";
-            pictures = {};
-            for (let i = 0; i < data.length; i++) {
-                pictures[data[i].id] = {
-                    "title": data[i].picture_name,
-                    "image": window.location.href + "picture/" + data[i].picture_url,
-                    "rating": data[i].rating,
-                    "dateTaken": data[i].date_taken,
-                    "createDate": data[i].created_at.substring(0, 10)
-                };
+    }
 
-                addCard(data[i].id, pictures[data[i].id])
-            }
-        }
-        );
-}
+    if (ev && ev.nodeName === "OPTION"){
+        let sortQuery = ev.value;
+        query += "&sort=" + sortQuery;
+        changeButtonName(ev.value);
+        showFilter();
 
-function changeOrder() {
-    let button = document.getElementById("orderButton");
-    button.innerText = order === "ASC" ? "Ascendente" : "Descendente";
-    order = order === "ASC" ? "DESC" : "ASC";
-    orderPictures(document.getElementById("inputGroupSelect04").value)
-}
+    }
 
-async function searchPictures(searchValue) {
-
-    await fetch(searchUrl + "?search=" + searchValue, {
+    await fetch(filterUrl + query, {
         method: "GET",
         credentials: 'include',
         headers: {
@@ -319,56 +313,120 @@ async function searchPictures(searchValue) {
         .then((data) => {
             picturesContainer.innerHTML = "";
             if (data.length > 0) {
-                console.log(data.length);
                 pictures = {};
-
                 for (let i = 0; i < data.length; i++) {
                     pictures[data[i].id] = {
                         "title": data[i].picture_name,
                         "image": window.location.href + "picture/" + data[i].picture_url,
                         "rating": data[i].rating,
                         "dateTaken": data[i].date_taken,
-                        "createDate": data[i].created_at.substring(0, 10)
                     };
 
                     addCard(data[i].id, pictures[data[i].id])
                 }
             } else {
-                picturesContainer.innerHTML = '<h2 style="text-align:center;">No se encuentra ninguna foto con ese título</h2>';
+                picturesContainer.innerHTML = '<h2 style="text-align:center;">No se encuentra ninguna foto con ese criterio</h2>';
             }
+        }
+        );
+}
 
-        });
+function changeOrder(ev) {
+    let button = document.getElementById("orderButton");
+    button.innerHTML = order === "ASC" ? '<i class="bi bi-sort-down-alt"></i>' : '<i class="bi bi-sort-down"></i>' ;
+    order = order === "ASC" ? "DESC" : "ASC";
+    button.value = order;
+
+    filterPictures();
 }
 
 
-function showPicture(ev){
+function showPicture(ev) {
     let previousPicture = document.getElementById('pictures').lastElementChild;
     let nextPicture = document.getElementById('pictures').firstElementChild;
     let imgSrc = "";
+    let title = "";
 
-    if (!ev.target.dataset.id){
+    //Si la imagen carga por el evento
+    if (!ev.target.dataset.id) {
         imgSrc = ev.target.src;
         previousPicture = ev.target.parentNode.previousElementSibling || previousPicture;
         nextPicture = ev.target.parentNode.nextElementSibling || nextPicture;
+        title = ev.target.nextElementSibling.children[0].innerText;
+    // La imagen viene dada por el evento
     } else {
-        imgSrc = document.getElementById(ev.target.dataset.id).firstElementChild.src;
-        previousPicture = document.getElementById(ev.target.dataset.id).previousElementSibling  || previousPicture;
-        nextPicture = document.getElementById(ev.target.dataset.id).nextElementSibling || nextPicture;
+        card = document.getElementById(ev.target.dataset.id);
+        imgSrc = card.firstElementChild.src;
+        title = card.children[1].children[0].innerText
+        previousPicture = card.previousElementSibling || previousPicture;
+        nextPicture = card.nextElementSibling || nextPicture;
     }
 
     document.getElementById('modalPicture').style.display = "block";
     document.getElementById('modalImg').src = imgSrc;
+    document.getElementById('modalTitle').innerText = title;
     document.getElementById('previousButton').dataset.id = previousPicture.id;
     document.getElementById('nextButton').dataset.id = nextPicture.id;
 }
 
 
 function showFilter() {
-    let filter = document.getElementById('filterContainer')
-
-    filter.style.display = filter.style.display == "none" ? "flex" : "none"
+    let filter = document.getElementById('filterContainer');
+    filter.style.display = filter.style.display == "none" ? "block" : "none";
 }
 
-function closeModal(){
+function showDates(){
+    let dateContainer = document.getElementById('dateContainer');
+    dateContainer.style.display = dateContainer.style.display == "none" ? "block" : "none";
+}
+
+function changeButtonName(value){
+    let button = document.getElementById('orderSelect');
+    let caret = '<i class="bi bi-caret-down"></i>';
+    button.value = value;
+    switch (value) {
+        case "picture_name":
+            button.innerHTML = "Alfabético"+caret;
+            break;
+
+        case "rating":
+            button.innerHTML = "Calificación"+caret
+            break;
+
+        case "date_taken":
+            button.innerHTML = "Fecha de captura"+caret
+            break;
+
+        default:
+            button.innerHTML = "Fecha de subida"+caret
+            break;
+    }
+    ;
+}
+
+function showSearch(){
+    let search = document.getElementById('searchBox');
+    search.style.display = search.style.display == "none" ? "block" : "none";
+}
+
+function closeModal() {
     document.getElementById('modalPicture').style.display = "none";
 }
+
+function getTimestampFromUnix(UNIX_timestamp){
+    let a = new Date(UNIX_timestamp * 1000);
+    let year = a.getFullYear();
+    let month = (a.getMonth()+1) < 10 == 1 ? "0"+(a.getMonth()+1) : a.getMonth()+1;
+    let day = a.getDate();
+    let time = year + '-' + month + '-' + day;
+    return time;
+  }
+
+function formatUnix(UNIX_timestamp){
+    let a = new Date(UNIX_timestamp * 1000);
+    let year = a.getFullYear();
+    let month = (a.getMonth()+1) < 10 == 1 ? "0"+(a.getMonth()+1) : a.getMonth()+1;
+    let day = a.getDate();
+    let time = day + '-' + month + '-' + year;
+    return time;
+  }

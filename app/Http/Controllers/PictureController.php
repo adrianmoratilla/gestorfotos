@@ -28,7 +28,7 @@ class PictureController extends Controller
         $validatorRules = [
             "title" => ['required','max:80'],
             "rating" => ['numeric','max:5'],
-            "dateTaken" => ['date','before:today','nullable'],
+            "dateTaken" => ['date','before:tomorrow','nullable'],
         ];
         //Si es edición, se valida que exista la foto
         if($req->has('id')){
@@ -67,7 +67,7 @@ class PictureController extends Controller
                     $picture->picture_url = explode("/",$path)[1];
                     $picture->rating = $req->rating;
                     $picture->user_id = Auth::id();
-                    $picture->date_taken = $req->dateTaken;
+                    $picture->date_taken = strtotime($req->dateTaken);
                     //Guardar la imagen
                     $picture->save();
                 }else{
@@ -76,7 +76,7 @@ class PictureController extends Controller
                     //Actualizarla
                     $picture->picture_name = $req->title;
                     $picture->rating = $req->rating;
-                    $picture->date_taken = $req->dateTaken;
+                    $picture->date_taken = strtotime($req->dateTaken);
                     $picture->save();
                 }
                 $response["status"] = 20;
@@ -122,16 +122,26 @@ class PictureController extends Controller
     }
 
 
-    public function orderPictures(Request $req) {
-        $pictures = Auth::user()->pictures;
+    public function filterPictures(Request $req) {
+
+        if ($req->has('search')){
+            $pictures = DB::table('pictures')
+            ->where('user_id', "=", Auth::user()->id)
+            ->where('picture_name', 'like', '%'.$req->search.'%')
+            ->get();
+        } else {
+            $pictures = Auth::user()->pictures;
+        }
 
         if($req->has('startDate')){
-            // dd(date('Y-m-d H:m:s', strtotime($req->startDate)));
-            $pictures = $pictures->whereBetween('created_at', [date('Y-m-d H:m:s', strtotime($req->startDate)), date('Y-m-d H:m:s', strtotime($req->endDate )) ]);
-            // $pictures = $pictures->where('date_taken', '>', $req->startDate)->where('date_taken', '<', $req->endDate);
+            $pictures = $pictures->where('date_taken', '>', strtotime($req->startDate));
+
+            if($req->has('endDate')){
+                $pictures = $pictures->where('date_taken', '<', strtotime($req->endDate));
+            }
         }
-        // dd($pictures);
-        if($req->has('sort')){
+
+        if($req->has('order')){
             if ($req->order === "ASC"){
                 $pictures = $pictures->sortBy($req->sort);
             } else {
@@ -139,16 +149,6 @@ class PictureController extends Controller
             }
         }
 
-        return $pictures->values()->toJson();
-    }
-
-    public function searchPictures(Request $req){
-        if ($req->has('search')){
-            $pictures = DB::table('pictures')
-            ->where('user_id', "=", Auth::user()->id)
-            ->where('picture_name', 'like', '%'.$req->search.'%')
-            ->get();
-        }
         return $pictures->values()->toJson();
     }
 
