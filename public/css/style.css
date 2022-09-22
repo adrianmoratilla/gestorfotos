@@ -90,7 +90,7 @@ header .input-group {
 }
 
 #modalImg {
-    height: 85vh;
+    max-height: 85vh;
     object-fit: contain;
     width: 100%;
 }
@@ -112,6 +112,8 @@ header .input-group {
 #modalPicture .modal-body{
     background-color: white;
     width: auto;
+    flex: none !important;
+    margin: auto 0;
 }
 
 .bi-caret-down {
@@ -181,9 +183,6 @@ header .input-group {
         width: 48%;
     }
 
-    .modal-body{
-        flex: none !important;
-    }
 
     #modalImg {
         height: auto;
