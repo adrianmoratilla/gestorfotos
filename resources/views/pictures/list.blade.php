@@ -4,7 +4,7 @@
 
     <div class="buttonContainer mb-3">
 
-        <button class="btn btn-secondary" type="button" id="orderSelect" title="Orden" onclick="showFilter()">
+        <button class="btn btn-secondary" type="button" id="orderSelect" onclick="showFilter()" title="Cambiar orden">
             Fecha de subida <i class="bi bi-caret-down"></i>
         </button>
         <div class="dropdown-menu" id="filterContainer">
@@ -19,7 +19,7 @@
             <i class="bi bi-sort-down"></i>
         </button>
 
-        <button id="orderButton" class="btn btn-outline-secondary" onclick="showDates()" title="Filtrar por fecha">
+        <button id="orderButton" class="btn btn-outline-secondary" onclick="showDates()" title="Filtrar por fecha de captura">
             <i class="bi bi-funnel"></i>
         </button>
 
@@ -157,7 +157,7 @@
                     <p>Si la borras, no podrás recuperarla</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" onclick="removePicture()">Borrar</button>
+                    <button type="button" class="btn btn-danger" onclick="removePicture()">Borrar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </div>

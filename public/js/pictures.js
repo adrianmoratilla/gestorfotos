@@ -76,6 +76,7 @@ async function sendData() {
     formData.append("title", title.value);
     formData.append("rating", rating.value);
     formData.append("dateTaken", dateTaken.value);
+
     if (selectedId > 0)
         formData.append("id", selectedId);
     var response = await fetch(postUrl, {
@@ -103,10 +104,11 @@ function readResponse(data) {
                 "title": title.value,
                 "image": imgPreview.src,
                 "rating": rating.value,
-                "dateTaken": dateTaken.value,
+                "dateTaken": new Date(dateTaken.value).getTime()/1000
+
                 // "createDate": new Date().toISOString().slice(0, 10)
             };
-
+            console.log(picture);
             pictures[data.msg] = picture;
             addCard(data.msg, picture);
         }
@@ -117,7 +119,7 @@ function readResponse(data) {
             pictures[selectedId].dateTaken = dateTaken.value;
 
             document.getElementById('cardTitle' + selectedId).innerText = title.value;
-            document.getElementById('cardDate' + selectedId).innerText = dateTaken.value;
+            document.getElementById('cardDate' + selectedId).innerText = "Tomada el "+ formatUnix(new Date(dateTaken.value).getTime()/1000);
 
             let starsContainer = document.getElementById('starsContainer' + selectedId);
             starsContainer.innerHTML = "";
@@ -417,7 +419,7 @@ function getTimestampFromUnix(UNIX_timestamp){
     let a = new Date(UNIX_timestamp * 1000);
     let year = a.getFullYear();
     let month = (a.getMonth()+1) < 10 == 1 ? "0"+(a.getMonth()+1) : a.getMonth()+1;
-    let day = a.getDate();
+    let day = a.getDate() < 10 ? "0" + a.getDate() : a.getDate();
     let time = year + '-' + month + '-' + day;
     return time;
   }
@@ -426,7 +428,7 @@ function formatUnix(UNIX_timestamp){
     let a = new Date(UNIX_timestamp * 1000);
     let year = a.getFullYear();
     let month = (a.getMonth()+1) < 10 == 1 ? "0"+(a.getMonth()+1) : a.getMonth()+1;
-    let day = a.getDate();
+    let day = a.getDate() < 10 ? "0" + a.getDate() : a.getDate();
     let time = day + '-' + month + '-' + year;
     return time;
   }

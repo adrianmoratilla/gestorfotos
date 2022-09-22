@@ -37,6 +37,8 @@ header .input-group {
     text-align: right;
     display: flex;
     justify-content: space-between;
+    background: white;
+    color: #6c757d;
 }
 
 .dropdown-menu {
@@ -241,7 +243,27 @@ header .input-group {
 
 }
 
+.btn-danger {
+    background-color: #FE755D;
+    border-color: #FE755D;
+}
 
+.btn-primary{
+    background-color: #F3F7F0;
+    border-color:#F3F7F0;
+    color: #19323C;
+}
+
+.btn-primary:hover{
+    background-color: #DFEAD7;
+    border-color: #DFEAD7;
+    color: #19323C
+}
+
+.btn-success{
+    background-color: #00A878;
+    border-color: #00A878;
+}
 
 
 
