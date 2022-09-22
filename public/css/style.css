@@ -35,6 +35,8 @@ header .input-group {
     white-space: nowrap;
     width: 175px;
     text-align: right;
+    display: flex;
+    justify-content: space-between;
 }
 
 .dropdown-menu {
