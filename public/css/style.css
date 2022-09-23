@@ -251,20 +251,27 @@ header .input-group {
 }
 
 .btn-danger {
-    background-color: #FE755D;
-    border-color: #FE755D;
+    background-color: #fe755d8e;
+    border-color: #fe755d8e;
+    color: #19323C;
 }
 
 .btn-primary{
-    background-color: #F3F7F0;
-    border-color:#F3F7F0;
+    background-color: #cadebb;
+    border-color:#cadebb;
     color: #19323C;
 }
 
 .btn-primary:hover{
-    background-color: #DFEAD7;
+    background-color: #dbf5c8;
     border-color: #DFEAD7;
     color: #19323C
+}
+
+.btn-secondary{
+    background-color: #6c757d2b;
+    color:#19323C;
+    border-color: #6c757d2b;
 }
 
 .btn-success{
