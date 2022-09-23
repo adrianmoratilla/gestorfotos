@@ -270,12 +270,23 @@ header .input-group {
     border-color:#19323C;
 }
 
-.btn-outline-primary:hover{
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover{
     background-color: #DFEAD7;
     color: #19323C;
     border-color: #DFEAD7
 }
 
+
+
+
+a{
+    color: #B3CEA1
+}
+
+a:hover{
+    color: #bedcaa
+}
 
 
 

@@ -108,7 +108,6 @@ function readResponse(data) {
 
                 // "createDate": new Date().toISOString().slice(0, 10)
             };
-            console.log(picture);
             pictures[data.msg] = picture;
             addCard(data.msg, picture);
         }

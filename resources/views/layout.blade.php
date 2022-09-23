@@ -34,7 +34,7 @@
                 <div class="input-group" style="margin-right: 5%">
                     <input type="text" class="form-control" autocomplete="off" id="searchBox" placeholder="Buscar fotos..." onkeyup="filterPictures(event.target)" style="display:none">
                     <div class="input-group-append" onclick="showSearch()">
-                        <span class="input-group-text" title="Buscar fotos por título" style="cursor: pointer"><i class="bi bi-search"></i></span>
+                        <span class="input-group-text" title="Buscar fotos por título" style="cursor: pointer; background-color:#DFEAD7; border-color: #d2e2c6"><i class="bi bi-search"></i></span>
                     </div>
                 </div>
                     <a href="{{ route('logout') }}"><button type="button"
