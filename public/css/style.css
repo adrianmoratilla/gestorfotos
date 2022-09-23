@@ -303,8 +303,8 @@ a:hover{
 }
 
 input[type="date"]{
-    width: auto;
-    height: auto;
+    width: 164px;
+    height: 58px;
 }
 
 
