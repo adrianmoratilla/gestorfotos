@@ -56,7 +56,11 @@
   </div>
   <div class="mb-3">
     <label for="inputPassword" class="form-label">Password</label>
-    <input type="password" name="password" id="inputPassword" required aria-describedby="passwordHelp" class="form-control">
+    <input type="password" name="password" id="inputPassword" required aria-describedby="passwordHelp" @class([
+        "form-control",
+        "is-valid" => $errors->any() && !$errors->getBag('default')->has('password'),
+        "is-invalid" => $errors->any() && $errors->getBag('default')->has('password')
+      ])>
     @if($tipo=='registro')
       <div id="passwordHelp" class="form-text">Debe tener al menos 6 caracteres con letras mayúsculas, minúsculas y números.</div>
     @endif

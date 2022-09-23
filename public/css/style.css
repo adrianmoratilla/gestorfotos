@@ -265,7 +265,16 @@ header .input-group {
     border-color: #00A878;
 }
 
+.btn-outline-primary{
+    color:#19323C;
+    border-color:#19323C;
+}
 
+.btn-outline-primary:hover{
+    background-color: #DFEAD7;
+    color: #19323C;
+    border-color: #DFEAD7
+}
 
 
 

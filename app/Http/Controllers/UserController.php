@@ -15,18 +15,19 @@ class UserController extends Controller
 
     public function login(Request $req){
         $credentials = $req->validate([
-            'name' => ['required'],
+            'name' => ["required", "exists:users,name"],
             'password' => ['required'],
         ]);
+
         $recordar = ($req->has('remember') ? true : false);
+
         if (Auth::attempt($credentials,$recordar)) {
             $req->session()->regenerate();
 
             return redirect()->intended(route('home'));
         }
-        return redirect(route('login'))->withInput()->withErrors([
-            'name' => 'Las credenciales introducidas no son correctas.',
-            'password' => 'La contraseña es incorrecta.'
+        return redirect()->back()->withInput($req->only('name', 'remember'))->withErrors([
+            'password' => 'Contraseña incorrecta.',
         ]);
     }
 

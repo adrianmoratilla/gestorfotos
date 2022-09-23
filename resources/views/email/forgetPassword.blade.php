@@ -1,4 +1,4 @@
-<h1>Hola </h1>
+<h1>¡Hola!</h1>
 
 ¿Has olvidado tu contraseña?
 Hemos recibido una petición para restablecer la contraseña de tu cuenta.
