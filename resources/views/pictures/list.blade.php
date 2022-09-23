@@ -8,9 +8,9 @@
             Fecha de subida <i class="bi bi-caret-down"></i>
         </button>
         <div class="dropdown-menu" id="filterContainer">
-            <option class="dropdown-item" type="button" value="picture_name" onclick="filterPictures(event.target)">Alfabético</option>
-            <option class="dropdown-item" type="button" value="rating" onclick="filterPictures(event.target)">Calificación</option>
-            <option class="dropdown-item" type="button" value="date_taken" onclick="filterPictures(event.target)">Fecha captura</option>
+            <button class="dropdown-item" type="button" value="picture_name" onclick="filterPictures(event.target)">Alfabético</button>
+            <button class="dropdown-item" type="button" value="rating" onclick="filterPictures(event.target)">Calificación</button>
+            <button class="dropdown-item" type="button" value="date_taken" onclick="filterPictures(event.target)">Fecha captura</button>
             {{-- <option class="dropdown-item" type="button" value="created_at" onclick="filterPictures(event.target)">Fecha de subida</option> --}}
         </div>
 

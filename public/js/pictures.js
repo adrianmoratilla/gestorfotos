@@ -296,7 +296,7 @@ async function filterPictures(ev) {
         }
     }
 
-    if (ev && ev.nodeName === "OPTION"){
+    if (ev && ev.nodeName === "BUTTON"){
         let sortQuery = ev.value;
         query += "&sort=" + sortQuery;
         changeButtonName(ev.value);
