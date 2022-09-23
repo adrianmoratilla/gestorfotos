@@ -302,7 +302,9 @@ a:hover{
     color: #bedcaa
 }
 
-
-
+input[type="date"]{
+    width: auto;
+    height: auto;
+}
 
 
