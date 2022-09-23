@@ -238,9 +238,12 @@ header .input-group {
     #modalImg{
         height: auto;
     }
+}
 
-
-
+@media only screen and (max-width: 550px){
+    .card{
+        width: 100%;
+    }
 }
 
 .btn-danger {
